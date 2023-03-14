@@ -22,3 +22,5 @@ require (
 	golang.org/x/tools v0.1.12
 	gopkg.in/yaml.v2 v2.4.0
 )
+
+replace github.com/go-delve/delve => /Users/david/go/src/github.com/david-liu-950627/delve

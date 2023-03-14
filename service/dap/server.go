@@ -1042,7 +1042,7 @@ func (s *Session) onLaunchRequest(request *dap.LaunchRequest) {
 			}
 			close(s.noDebugProcess.exited)
 			s.logToConsole(proc.ErrProcessExited{Pid: cmd.ProcessState.Pid(), Status: cmd.ProcessState.ExitCode()}.Error())
-			s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
+			// s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
 		}()
 		return
 	}
@@ -1140,7 +1140,7 @@ func (s *Session) onDisconnectRequest(request *dap.DisconnectRequest) {
 		}
 		s.logToConsole(fmt.Sprintf("Closing client session, but leaving multi-client DAP server at %s with debuggee %s", s.config.Listener.Addr().String(), status))
 		s.send(&dap.DisconnectResponse{Response: *newResponse(request.Request)})
-		s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
+		// s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
 		s.conn.Close()
 		s.debugger = nil
 		// The target is left in whatever state it is already in - halted or running.
@@ -1172,7 +1172,7 @@ func (s *Session) onDisconnectRequest(request *dap.DisconnectRequest) {
 		s.send(&dap.DisconnectResponse{Response: *newResponse(request.Request)})
 	}
 	// The debugging session has ended, so we send a terminated event.
-	s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
+	// s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
 }
 
 // stopDebugSession is called from Stop (main goroutine) and
@@ -2730,8 +2730,8 @@ func (s *Session) doCall(goid, frame int, expr string) (*api.DebuggerState, []*p
 		GoroutineID:          int64(goid),
 	}, nil)
 	if processExited(state, err) {
-		e := &dap.TerminatedEvent{Event: *newEvent("terminated")}
-		s.send(e)
+		// e := &dap.TerminatedEvent{Event: *newEvent("terminated")}
+		// s.send(e)
 		return nil, nil, errors.New("terminated")
 	}
 	if err != nil {
@@ -3474,7 +3474,7 @@ func (s *Session) runUntilStopAndNotify(command string, allowNextStateChange cha
 	}
 
 	if processExited(state, err) {
-		s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
+		// s.send(&dap.TerminatedEvent{Event: *newEvent("terminated")})
 		return
 	}
 
